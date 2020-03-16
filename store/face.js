@@ -165,7 +165,6 @@ export const actions = {
       l.xmax - l.xmin + (padding * 2),
       l.ymax - l.ymin + (padding * 2),
       0, 0, leftCanvasDiv.width, leftCanvasDiv.height)
-    // __drawNumber(canvasCtx, detection.landmarks.getLeftEye())
     __drawNumber(canvasCtx, [{ x: l.xmin, y: l.ymin }, { x: l.xmax, y: l.ymax }])
     __binarization(leftCanvasCtx, leftCanvasDiv, binaryThreshold)
     const r = minmax(detection.landmarks.getRightEye(), 999, 999)
@@ -176,7 +175,6 @@ export const actions = {
       r.xmax - r.xmin + (padding * 2),
       r.ymax - r.ymin + (padding * 2),
       0, 0, rightCanvasDiv.width, rightCanvasDiv.height)
-    // __drawNumber(canvasCtx, detection.landmarks.getRightEye())
     __drawNumber(canvasCtx, [{ x: r.xmin, y: r.ymin }, { x: r.xmax, y: r.ymax }])
     __binarization(rightCanvasCtx, leftCanvasDiv, binaryThreshold)
     const leftBlackRate = __getBlackPixelRate(leftCanvasCtx, leftCanvasDiv)
