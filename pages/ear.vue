@@ -72,6 +72,7 @@
         hidden
       />
     </v-flex>
+    <adsbygoogle />
   </v-layout>
 </template>
 
