@@ -51,30 +51,10 @@
       <sleep-info :sleep="sleep" />
       <v-card>
         <v-card-text>
+          <v-switch v-model="hasSound" class="ma-4 c_sound_toggle" label="Sound" />
           <p>目のところだけを切り出して二値化し、黒くなっている部分(瞳だと思われる部分)の割合で寝ているかどうか判定してみました。</p>
           <v-divider />
-          <v-slider
-            v-model="blackRateThreshold"
-            :max="1"
-            :min="0"
-            :step="0.001"
-            label="Black Rate Threshold"
-            prepend-icon="mdi-eye"
-            thumb-label="always"
-            ticks
-          />
-          <p>黒い部分の割合がこれを下回ると目を閉じていると判定します。暗い部屋では0.050、明るい部屋では0.035ぐらいがおすすめ。</p>
-          <v-slider
-            v-model="binaryThreshold"
-            :max="90"
-            :min="10"
-            :step="1"
-            label="Binarization Threshold"
-            prepend-icon="mdi-eye"
-            thumb-label="always"
-            ticks
-          />
-          <p>二値化の閾値です。暗い部屋では下げるとよいです。明るい部屋では40ぐらいがおすすめ。</p>
+          <br>
           <v-slider
             v-model="fps"
             :max="60"
@@ -86,6 +66,32 @@
             ticks
           />
           <p>動画が滑らかになりますが、PCが重くなります。</p>
+          <v-divider />
+          <br>
+          <v-slider
+            v-model="blackRateThreshold"
+            :max="0.5"
+            :min="0"
+            :step="0.001"
+            label="Black Rate Threshold"
+            prepend-icon="mdi-eye"
+            thumb-label="always"
+            ticks
+          />
+          <p>黒い部分の割合がこれを下回ると目を閉じていると判定します。</p>
+          <v-divider />
+          <br>
+          <v-slider
+            v-model="binaryThreshold"
+            :max="150"
+            :min="10"
+            :step="1"
+            label="Binarization Threshold"
+            prepend-icon="mdi-eye"
+            thumb-label="always"
+            ticks
+          />
+          <p>二値化の閾値です。自動調節されます。</p>
         </v-card-text>
       </v-card>
     </v-flex>
@@ -104,6 +110,7 @@
 
 <script>
 import SleepInfo from '../components/SleepInfo'
+import beep from '../assets/beep.wav'
 
 export default {
   components: {
@@ -115,7 +122,7 @@ export default {
     return {
       interval: null,
       detectTimer: null,
-      fps: 1,
+      fps: 15,
       realFps: 0,
       step: 2,
       counter: 0,
@@ -135,8 +142,8 @@ export default {
       sleep: false,
       binaryThreshold: 45,
       blackRate: 0,
-      blackRateThreshold: 0.035
-      // eslint-disable-next-line new-cap,no-undef
+      blackRateThreshold: 0.25,
+      sound: new Audio(beep),
     }
   },
   computed: {
@@ -192,16 +199,26 @@ export default {
           }).then((__result) => {
             if (!__result) { return }
             self.blackRate = (__result.leftBlackRate + __result.rightBlackRate) / 2
-            self.sleep = self.blackRate < self.blackRateThreshold
+            self.adjustBlackRateThreshold()
+            // self.sleep = self.blackRate < self.blackRateThreshold
+            const result = self.blackRate < self.blackRateThreshold ? 'sleep' : 'awake'
+            self.pushSleepDetectResult(result)
           })
-          // if (!this.detectTimer) {
-          //   this.detectTimer = setTimeout(this.sleepDetect, 2000)
-          // }
+          if (!this.detectTimer) {
+            this.detectTimer = setTimeout(this.sleepDetect, 1000)
+          }
         }
         const t1 = performance.now()
         self.duration = (t1 - t0).toFixed(2)
         self.realFps = (1000 / (t1 - t0)).toFixed(2)
       }, 1000 / fps)
+    },
+    adjustBlackRateThreshold () {
+      if (this.blackRate > 0.44) {
+        this.binaryThreshold -= 3
+      } else if (this.blackRate < 0.1) {
+        this.binaryThreshold += 3
+      }
     },
     /**
      * 認証結果をスロットルしつつ蓄積する
@@ -221,7 +238,7 @@ export default {
     sleepDetect () {
       this.sleep = this.recognitionResults.sleep / (this.recognitionResults.sleep + this.recognitionResults.awake) > this.sleepConfidence
       if (this.hasSound && this.sleep) {
-        this.speak('眠気を検知しました。')
+        this.sound.play()
       }
       this.resetDetectionData()
     },

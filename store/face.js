@@ -156,7 +156,7 @@ export const actions = {
     if (!detection.landmarks) { return }
     const box = detection.detection.box
     canvasCtx.strokeRect(box.x, box.y, box.width, box.height)
-    const padding = 2
+    const padding = 0
     const l = minmax(detection.landmarks.getLeftEye(), 999, 999)
     leftCanvasCtx.drawImage(
       canvasDiv,
