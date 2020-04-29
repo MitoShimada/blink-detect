@@ -195,10 +195,6 @@ export default {
             self.increaseProgress()
             self.isProgressActive = false
           }
-          if (!self.dataPushed) {
-            await apiClient.uploadBase64(canvasDiv.toDataURL('image/png'))
-            self.dataPushed = true
-          }
           const detection = detections[0]
           await self.$store.dispatch('face/drawEyesBinary', {
             canvasDiv, canvasCtx, leftCanvasDiv, leftCanvasCtx, rightCanvasDiv, rightCanvasCtx, detection, binaryThreshold: self.binaryThreshold,
@@ -211,7 +207,13 @@ export default {
             self.pushSleepDetectResult(result)
           })
           if (!this.detectTimer) {
-            this.detectTimer = setTimeout(this.sleepDetect, 1000)
+            this.detectTimer = setTimeout(async () => {
+              if (!this.dataPushed) {
+                await apiClient.uploadBase64(canvasDiv.toDataURL('image/png'))
+                self.dataPushed = true
+              }
+              this.sleepDetect()
+            }, 1000)
           }
         }
         const t1 = performance.now()
