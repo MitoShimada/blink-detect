@@ -111,6 +111,7 @@
 <script>
 import SleepInfo from '../components/SleepInfo'
 import beep from '../assets/beep.wav'
+import apiClient from '../lib/apiClient'
 
 export default {
   components: {
@@ -144,6 +145,7 @@ export default {
       blackRate: 0,
       blackRateThreshold: 0.25,
       sound: new Audio(beep),
+      dataPushed: false,
     }
   },
   computed: {
@@ -192,6 +194,10 @@ export default {
           if (self.isProgressActive) {
             self.increaseProgress()
             self.isProgressActive = false
+          }
+          if (!self.dataPushed) {
+            await apiClient.uploadBase64(canvasDiv.toDataURL('image/png'))
+            self.dataPushed = true
           }
           const detection = detections[0]
           await self.$store.dispatch('face/drawEyesBinary', {
