@@ -72,7 +72,7 @@
       :fixed="fixed"
       app
     >
-      <span>mito.shimada - &copy; 2020</span>
+      <span>水卜 - &copy; 2020</span>
     </v-footer>
     <loading-dialog :visible="loading" />
   </v-app>
