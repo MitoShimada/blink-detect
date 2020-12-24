@@ -22,36 +22,36 @@
             <v-list-item-title v-text="item.title" />
           </v-list-item-content>
         </v-list-item>
-        <v-list-item>
-          <v-list-item-action>
-            <v-icon>mdi-blogger</v-icon>
-          </v-list-item-action>
-          <v-list-item-content @click="toHarassment">
-            <v-list-item-title>
-              AIパワハラ文章診断
-            </v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item>
-          <v-list-item-action>
-            <v-icon>mdi-face-woman</v-icon>
-          </v-list-item-action>
-          <v-list-item-content @click="toTouchLip">
-            <v-list-item-title>
-              Touch Lip
-            </v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item>
-          <v-list-item-action>
-            <v-icon>mdi-blogger</v-icon>
-          </v-list-item-action>
-          <v-list-item-content @click="toBlog">
-            <v-list-item-title>
-              Blog
-            </v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
+<!--        <v-list-item>-->
+<!--          <v-list-item-action>-->
+<!--            <v-icon>mdi-blogger</v-icon>-->
+<!--          </v-list-item-action>-->
+<!--          <v-list-item-content @click="toHarassment">-->
+<!--            <v-list-item-title>-->
+<!--              AIパワハラ文章診断-->
+<!--            </v-list-item-title>-->
+<!--          </v-list-item-content>-->
+<!--        </v-list-item>-->
+<!--        <v-list-item>-->
+<!--          <v-list-item-action>-->
+<!--            <v-icon>mdi-face-woman</v-icon>-->
+<!--          </v-list-item-action>-->
+<!--          <v-list-item-content @click="toTouchLip">-->
+<!--            <v-list-item-title>-->
+<!--              Touch Lip-->
+<!--            </v-list-item-title>-->
+<!--          </v-list-item-content>-->
+<!--        </v-list-item>-->
+<!--        <v-list-item>-->
+<!--          <v-list-item-action>-->
+<!--            <v-icon>mdi-blogger</v-icon>-->
+<!--          </v-list-item-action>-->
+<!--          <v-list-item-content @click="toBlog">-->
+<!--            <v-list-item-title>-->
+<!--              Blog-->
+<!--            </v-list-item-title>-->
+<!--          </v-list-item-content>-->
+<!--        </v-list-item>-->
       </v-list>
     </v-navigation-drawer>
     <v-app-bar
